@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin update task view</title>
+
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+body {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: sans-serif;
+	background-color: #f9f9f9;
+	color: #333;
+	font-size: 15px;
+}
+
+
+.container-view {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	text-align: center;
+	min-width: 100%;
+}
+
+.container-view div {
+	background-color: #f1f1f1;
+	width: auto;
+	height: auto;
+	margin: 1.5rem;
+	text-align: center;
+	font-size: 1.2rem;
+}
+
+div.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	min-width: 90%;
+	max-width: 1000px;
+	min-height: 100%;
+}
+
+div.task-item {
+	min-width: 100%;
+	max-width: 900px;
+	height: auto;
+}
+
+div.task-item table {
+	border: solid 5px #037d54;
+	min-width: 100%;
+	max-width: 900px;
+	height: auto;
+}
+
+div.container div.task-item table tbody tr td {
+	word-wrap: wrap;
+}
+
+
+div.form-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-width: 100%;
+	max-width: 900px;
+	height: auto;
+	margin: 1rem 1rem 2rem 1rem;
+}
+
+div.form-container form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-width: 80%;
+	max-width: 900px;
+	height: auto;
+	margin: 1rem 1rem 2rem 1rem;
+}
+
+form h2, form label, form input#taskNumber {
+	color: green;
+	text-align: center;
+}
+
+.container div h1 {
+	text-align: center;
+	color: green;
+	font-size: 2.5rem;
+}
+
+.container div h2 {
+	text-align: center;
+	color: green;
+	font-size: 2rem;
+}
+
+td.task-number {
+	font-size: 2rem;
+	color: red;
+	font-style: bold;
+}
+
+th, td {
+	padding: 10px;
+	border: 2px solid #037d54;
+	text-align: center;
+	word-wrap: wrap;
+}
+
+th {
+	background-color: #037d54;
+	color: white;
+}
+
+.completed-row {
+	background-color: rgb(98, 160, 234);
+}
+
+/* Forms */
+form {
+	display: grid;
+	gap: 1rem;
+}
+
+div.form-container form div input#complete {
+	text-align: center;
+	margin-right: auto;
+	margin-left: auto;
+	min-width: 1rem;
+	min-height: 1rem;
+}
+
+div.form-container form label {
+	font-weight: bold;
+	font-size: 1.5rem;
+	text-align: center;
+	margin: 1rem;
+}
+
+form input#taskNumber {
+	color: green;
+	font-size: 1rem;
+}
+
+input[type="text"], textarea, input[type="checkbox"] {
+	width: 100%;
+	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+textarea {
+	resize: vertical;
+}
+
+div.scott-button, div button {
+	background-color: #037d54;
+	color: white;
+	border: none;
+	border-radius: 1rem;
+	padding: 1rem;
+	font-size: 1.2rem;
+	cursor: pointer;
+	margin-top: 2rem;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+div.scott-button a {
+	text-decoration: none;
+	color: white;
+	font-size: 1.2rem;
+}
+
+.completed-row td {
+	background-color: rgb(98, 160, 234);
+
+	/* Or any color you prefer */
+}
+
+/* Responsive Styles */
+@media ( max-width : 768px) {
+	div.form-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-width: 80%;
+		max-width: 900px;
+		height: auto;
+	}
+	.container div h1 {
+		text-align: center;
+		color: green;
+		font-size: 2.5rem;
+	}
+	td.task-number {
+		font-size: 1.5rem;
+		color: red;
+		font-style: bold;
+	}
+	th {
+		background-color: #037d54;
+		color: white;
+	}
+	.container div h1 {
+		text-align: center;
+		color: green;
+		font-size: 2.5rem;
+	}
+	table {
+		font-size: 0.9rem;
+	}
+	th, td {
+		padding: 8px;
+		text-align: center;
+		word-wrap: wrap;
+	}
+	div.form-container form label {
+		text-align: center;
+	}
+}
+
+@media ( max-width : 480px) {
+	div.form-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-width: 80%;
+		max-width: 900px;
+		height: auto;
+	}
+	.container div h1 {
+		text-align: center;
+		color: green;
+		font-size: 2.5rem;
+	}
+	td.task-number {
+		font-size: 1rem;
+		color: red;
+		font-style: bold;
+	}
+	th {
+		background-color: #037d54;
+		color: white;
+	}
+	.container div h1 {
+		text-align: center;
+		color: green;
+		font-size: 2rem;
+	}
+	div.form-container form label {
+		text-align: center;
+	}
+	td {
+		padding: 8px;
+		text-align: center;
+		word-wrap: wrap;
+	}
+	div.scott-button, form div button {
+		background-color: #037d54;
+	}
+}
+</style>
+</head>
+
+<body>
+	<div class="container">
+
+
+
+		<div class="container-view">
+			<div class="scott-button">
+				<a th:href="@{/admin/update/task/viewTable}"> Table View</a>
+			</div>
+			<div class="scott-button">
+				<a th:href="@{/admin/update/task/viewModular}"> Modular View </a>
+			</div>
+		</div>
+		<div class="title">
+			<h1>Task List</h1>
+		</div>
+
+		<div class="task-item" th:each="task : ${tasks}">
+			<table>
+				<thead>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<th><strong>Task Number:</strong></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<td class="task-number" th:text="${task.taskNumber}">taskNumber</td>
+					</tr>
+				</tbody>
+
+				<thead>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<th><strong>Username:</strong></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<td th:text="${task.username}">username</td>
+					</tr>
+				</tbody>
+
+				<thead>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<th><strong>Content:</strong></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<td th:text="${task.content}">content</td>
+					</tr>
+				</tbody>
+
+				<thead>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<th><strong>Complete:</strong></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:class="${task.complete ? 'completed-row' : false}">
+						<td th:text="${task.complete ? 'true' : 'false'}">complete</td>
+					</tr>
+				</tbody>
+			</table>
+			<br /> <br />
+		</div>
+
+		<div class="form-container">
+			<form th:action="@{/admin/update/task/viewTable}"
+				th:object="${myTaskDto}" method="post">
+				<div>
+					<h2>Update Task Details</h2>
+				</div>
+
+				<label for="taskNumber">Task ID:</label> <input type="text"
+					th:field="*{taskNumber}" id="taskNumber" /> <label for="content">Updated
+					Message Content:</label>
+
+				<textarea th:field="*{content}" id="content" rows="4"></textarea>
+
+				<div>
+					<label for="complete">Task Complete Status:</label>
+				</div>
+				<div>
+					<input type="checkbox" th:field="*{complete}" id="complete" />
+				</div>
+
+				<div>
+					<button type="submit">Update Task</button>
+				</div>
+			</form>
+		</div>
+
+
+
+		<div class="scott-button">
+			<a th:href="@{/admin/index}">Go to Admin Index Page</a>
+		</div>
+	</div>
+</body>
+</html>

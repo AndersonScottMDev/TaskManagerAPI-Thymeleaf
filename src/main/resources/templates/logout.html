@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Index</title>
+
+<!-- <link rel="stylesheet" th: href="@{src/main/resources/static/css/StyleSheet.css}" />  -->
+
+<!-- <link rel="stylesheet" href="scott.css" /> -->
+
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	max-width: 90%;
+	height: auto;
+	font-size: large;
+	font-style: bold;
+	color: #04aa6d;
+	text-align: center;
+}
+
+div.form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-width: 90%;
+	max-width: 90%;
+	height: auto;
+	margin-top: 4rem;
+	background-color: white;
+	border: solid 5px green;
+	border-radius: 15px;
+	font-size: 1.5rem;
+	color: green;
+	text-align: center;
+	box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+}
+
+div.scott-button {
+	box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+	display: block;
+	min-width: 80%;
+	max-width: 80%;
+	height: auto;
+	margin: 1rem;
+	padding: 1rem;
+	background-color: #037d54;
+	border-radius: 15px;
+	font-size: 1.5rem;
+	text-align: center;
+}
+
+div.scott-button a {
+	color: white;
+	text-decoration: none;
+}
+
+@media ( max-width : 768px) {
+	div.form-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		min-width: 90%;
+		max-width: 90%;
+		height: auto;
+		margin-top: 4rem;
+		background-color: white;
+		border: solid 5px green;
+		border-radius: 15px;
+		font-size: 1rem;
+		color: green;
+		text-align: center;
+		box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+		text-decoration: none;
+	}
+	div.scott-button {
+		box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+		display: block;
+		min-width: 80%;
+		max-width: 80%;
+		height: auto;
+		margin: 1rem;
+		padding: 1rem;
+		background-color: #037d54;
+		border-radius: 15px;
+		font-size: 1rem;
+		color: white;
+		text-align: center;
+		text-decoration: none;
+	}
+	div.scott-button a {
+		color: white;
+		text-decoration: none;
+	}
+	@media ( max-width : 480px) {
+		div.form-container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			min-width: 90%;
+			max-width: 90%;
+			height: auto;
+			margin-top: 4rem;
+			background-color: white;
+			border: solid 5px green;
+			border-radius: 15px;
+			font-size: 1rem;
+			color: green;
+			text-align: center;
+			box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+			text-decoration: none;
+		}
+		div.scott-button {
+			box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+			display: block;
+			min-width: 80%;
+			max-width: 80%;
+			height: auto;
+			margin: 1rem;
+			padding: 1rem;
+			background-color: #037d54;
+			border-radius: 15px;
+			font-size: 1rem;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+		}
+		div.scott-button a {
+			color: white;
+			text-decoration: none;
+		}
+	}
+}
+</style>
+</head>
+
+<body>
+	<div class="form-container">
+		<div>
+			<h1>Successful Logout......</h1>
+		</div>
+
+		<div>
+			<p th:text="${username}"></p>
+		</div>
+		<div class="scott-button">
+			<a th:href="@{/login}"> Return to Index </a>
+		</div>
+	</div>
+</body>
+</html>
