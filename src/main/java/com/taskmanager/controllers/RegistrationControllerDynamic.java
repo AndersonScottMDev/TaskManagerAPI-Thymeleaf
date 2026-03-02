@@ -21,7 +21,8 @@ import com.taskmanager.repository.MyUserRepository;
 import com.taskmanager.service.MyUserService;
 
 @Controller
-public class RegistrationControllerDynamic {
+public class
+RegistrationControllerDynamic {
 
 	Logger logger = LoggerFactory.getLogger(AuthenticationAccessHandler.class.getName());
 	@Autowired
