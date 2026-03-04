@@ -38,7 +38,10 @@ public class AuthenticationAccessHandler extends SavedRequestAwareAuthentication
 		} else {
 			logger.trace("EXITED……………………………………onAuthenticationSuccess()--> /user/home");
 			setDefaultTargetUrl("/user/home");
+
 		}
+
+		setAlwaysUseDefaultTargetUrl(true);
 
 		// setDefaultTargetUrl();
 		super.onAuthenticationSuccess(request, response, authentication);

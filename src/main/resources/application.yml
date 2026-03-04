@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: TaskManagerAPIThymeleaf
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/task-manager-database?createDatabaseIfNotExist=true
+    username: root
+    password: five2one
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      # If using Flyway, it's safer to use 'validate' or 'none' in production.
+      # Use 'update' only during initial rapid development.
+      ddl-auto: update
+    properties:
+      hibernate:
+        id:
+          db_structure_naming_strategy: legacy
+        format_sql: true
+        show_sql: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    repair-on-migrate: true
+    # Use the specific placeholders defined in datasource
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    # Prevents app crash if the migration folder is empty
+    fail-on-missing-locations: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework: ERROR
+    com.taskmanager: DEBUG

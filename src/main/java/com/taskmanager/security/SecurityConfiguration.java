@@ -1,4 +1,3 @@
-
 package com.taskmanager.security;
 
 import org.slf4j.Logger;
@@ -31,111 +30,113 @@ import com.taskmanager.controllers.LastWord;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-	Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class.getName());
+    Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class.getName());
 
-	// MyUserDetailService contains the
-	@Autowired
-	private MyUserDetailService userDetailService;
+    // MyUserDetailService contains the
+    @Autowired
+    private MyUserDetailService userDetailService;
 
-	// DaoAuthenticationProvider - uses a UserDetailsService implementation to load
-	// user details from the data store
-	// The service will fetch the user's username, password, authorities (roles),
-	// and other relevant information
-	// Spring Security provides a "UserDetails" interface that you can implement to
-	// represent your user data
-	@Bean
-	AuthenticationProvider authenticationProvider() {
+    /**
+     * mouse
+     * Creates an AuthenticationManager bean.
+     *
+     * @return the authentication manager
+     */
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        // Create AuthenticationManager using the configured authentication provider
+        return new ProviderManager(authenticationProvider());
+    }
 
-		// DaoAuthenticationProvider is a class from spring security
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setUserDetailsService(userDetailService);
-		provider.setPasswordEncoder(passwordEncoder());
-		return provider;
-	}
+    // DaoAuthenticationProvider - uses a UserDetailsService implementation to load
+    // user details from the data store
+    // The service will fetch the user's username, password, authorities (roles),
+    // and other relevant information
+    // Spring Security provides a "UserDetails" interface that you can implement to
+    // represent your user data
+    @Bean
+    AuthenticationProvider authenticationProvider() {
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+        // DaoAuthenticationProvider is a class from spring security
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
-	/*
-	 * Note: the "/login" end point is located in the securityFilterChain because we
-	 * want it separate from the RestController. Spring Security will create a
-	 * "session
-	 */
-	// Provides a default configuration for me.
-	// "Everything behind the /login screen"
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-		LastWord lastWord = new LastWord(getClass().getName());
-		System.out.println("Class = " + lastWord.getLastWord());
-		System.out.println("ENTERED........................SecurityFilterChain()");
-		logger.trace("ENTERED……………………………………securityFilterChain()");
+    @Bean
+    public UserDetailsService userDetailsService() {
 
-		// by customizing the "authorizeHttpRequest" we got rid of the default login we
-		// had
-		// Note: "CSRF" Cross Site Request Forgery
-		// If "CSRF" is enabled all postrequests will be block
+        return userDetailService;
+    }
 
-		return httpSecurity.csrf(AbstractHttpConfigurer::disable)
+    @Bean
+    public ThymeleafViewResolver viewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(templateEngine());
+        resolver.setCharacterEncoding("UTF-8"); // Important for character encoding
+        return resolver;
+    }
 
-				.authorizeHttpRequests(registry -> {
-					registry.requestMatchers("/home", "/register/**", "/logout/**", "/login/**").permitAll();
-					registry.requestMatchers("/admin/**").hasRole("ADMIN");
-					registry.requestMatchers("/user/**").hasRole("USER");
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver()); // Crucial!
+        // ... other Thymeleaf configuration if needed
+        return templateEngine;
+    }
 
-					registry.anyRequest().authenticated();
+    @Bean
+    public ITemplateResolver templateResolver() {
+        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        resolver.setPrefix("templates/"); // <-- Important: Prefix for Thymeleaf templates
+        resolver.setSuffix(".html"); // <-- Important: Suffix for Thymeleaf templates
+        resolver.setTemplateMode(TemplateMode.HTML); // Or TemplateMode.XML, etc.
+        resolver.setCacheable(false); // For development, set to false to avoid caching issues
+        return resolver;
+    }
 
-					// when we add httpSecurity we need to add the default formLogin page
-				}).formLogin(httpSecurityFormLoginConfigurer -> {
-					httpSecurityFormLoginConfigurer.loginPage("/login").successHandler(new AuthenticationAccessHandler())
-							.permitAll();
-				}).build(); // build the HTTP Security
+    /*
+     * Note: the "/login" end point is located in the securityFilterChain because we
+     * want it separate from the RestController. Spring Security will create a
+     * "session
+     */
+    // Provides a default configuration for me.
+    // "Everything behind the /login screen"
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws
+                                                                       Exception {
 
-	}
+        LastWord lastWord = new LastWord(getClass().getName());
+        System.out.println("Class = " + lastWord.getLastWord());
+        System.out.println("ENTERED........................SecurityFilterChain()");
+        logger.trace("ENTERED……………………………………securityFilterChain()");
 
-	/**
-	 * Creates an AuthenticationManager bean.
-	 *
-	 * @return the authentication manager
-	 */
-	@Bean
-	public AuthenticationManager authenticationManager() {
-		// Create AuthenticationManager using the configured authentication provider
-		return new ProviderManager(authenticationProvider());
-	}
+        // by customizing the "authorizeHttpRequest" we got rid of the default login we had
 
-	@Bean
-	public UserDetailsService userDetailsService() {
+        // Note: "CSRF" Cross Site Request Forgery
+        // If "CSRF" is enabled all postrequests will be block
 
-		return userDetailService;
-	}
+        return httpSecurity.csrf(AbstractHttpConfigurer::disable)
 
-	@Bean
-	public SpringTemplateEngine templateEngine() {
-		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver()); // Crucial!
-		// ... other Thymeleaf configuration if needed
-		return templateEngine;
-	}
+                .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers("/home", "/register/**", "/logout/**", "/login/**", "/css/**", "/js/**")
+                            .permitAll();
+                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
+                    registry.requestMatchers("/user/**").hasRole("USER");
 
-	@Bean
-	public ITemplateResolver templateResolver() {
-		ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-		resolver.setPrefix("templates/"); // <-- Important: Prefix for Thymeleaf templates
-		resolver.setSuffix(".html"); // <-- Important: Suffix for Thymeleaf templates
-		resolver.setTemplateMode(TemplateMode.HTML); // Or TemplateMode.XML, etc.
-		resolver.setCacheable(false); // For development, set to false to avoid caching issues
-		return resolver;
-	}
+                    registry.anyRequest().authenticated();
 
-	@Bean
-	public ThymeleafViewResolver viewResolver() {
-		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-		resolver.setTemplateEngine(templateEngine());
-		resolver.setCharacterEncoding("UTF-8"); // Important for character encoding
-		return resolver;
-	}
+                    // when we add httpSecurity we need to add the default formLogin page
+                }).formLogin(httpSecurityFormLoginConfigurer -> {
+                    httpSecurityFormLoginConfigurer.loginPage("/login").successHandler(new AuthenticationAccessHandler()).permitAll();
+                }).build(); // build the HTTP Security
+
+    }
 
 }
