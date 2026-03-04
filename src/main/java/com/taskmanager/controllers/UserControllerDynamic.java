@@ -177,6 +177,8 @@ public class UserControllerDynamic {
 
 		model.addAttribute("username", myUserDto.getEmail());
 
+		model.addAttribute("role", myUserDto.getRole());
+
 		logger.trace("ENTERED……………………………………		@GetMapping(\"/user/index\")------");
 
 		return "user-index";
@@ -196,6 +198,8 @@ public class UserControllerDynamic {
 		myUserDto = myUserService.currentUser();
 
 		model.addAttribute("username", myUserDto.getEmail());
+
+		model.addAttribute("role", myUserDto.getRole());
 
 		logger.trace("ENTERED……………………………………		@GetMapping(\"/admin/index\")------");
 
